@@ -1,0 +1,17 @@
+Scores from p3 for Xiao,Tony 
+
+Note that format is: e-mail<comma>last name<comma>first name
+For example: ssdavis@ucdavis.edu,Davis,Sean
+
+Addresses used: bxiao@ucdavis.edu  
+davisHuffman.txt (7 points):
+OK
+ 
+AvlTree.cpp (4 points):
+OK
+ 
+linux.words (4 points):
+OK
+ 
+ 
+Total score: 15

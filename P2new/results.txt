@@ -1,0 +1,36 @@
+Scores from p2 for Xiao Tony Zhong Jiapeng 
+Note that format is: e-mail<comma>last name<comma>first name
+For example: ssdavis@ucdavis.edu,Davis,Sean
+
+Addresses used: bxiao@ucdavis.edu jpzhong@ucdavis.edu  
+BTree5_1.txt 3 6:
+OK
+ 
+BTree5_error.txt 3 6:
+OK
+  
+BTree18_18.txt 5 3:
+OK
+ 
+BTree5_5.txt 4 5:
+OK
+ 
+BTree18_18.txt 3 4:
+OK
+ 
+BTree10_6.txt 4 3:
+OK
+ 
+BTree5_3.txt 3 4:
+OK
+ 
+BTree13_2.txt 3 4:
+OK
+ 
+BTree10_6.txt 3 5:
+OK
+ 
+BTree10_6.txt 3 3:
+OK
+ 
+Total score: 50

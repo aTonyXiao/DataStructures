@@ -1,0 +1,49 @@
+Scores from p1 for Tony Xiao JiaPeng Zhong 
+Note that format is: e-mail<comma>last name<comma>first name
+For example: ssdavis@ucdavis.edu,Davis,Sean
+
+Addresses used: bxiao@ucdavis.edu jpzhong@ucdavis.edu  
+timetest.cpp operation testing:
+#1 for user input: 
+Test.dat
+1
+0
+OK
+#2 for user input: 
+Test.dat
+2
+0
+OK
+#3 for user input: 
+Test2.dat
+3
+0
+OK
+#4 for user input: 
+Test2.dat
+4
+0
+OK
+#5 for user input: 
+Test2.dat
+5
+0
+OK
+#6 for user input: 
+Test2.dat
+6
+0
+OK
+
+boarding.cpp:
+passengers-1.txt:
+passengers-2.txt:
+passengers-3.txt:
+passengers-4.txt:
+There are differences between your output and Sean's.
+Yours: 
+Back to front: 3070
+Random: 2570
+Outside in: 214
+Timetest score: 5  Boarding score: 15
+Total: 20 out of 25.

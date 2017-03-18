@@ -1,0 +1,156 @@
+#! /bin/bash
+
+testerDirectory=/home/ssdavis/60/p1/Testing
+maxSleep=10   # 10 seconds to complete one run.
+if [ $# -ne 1 ]; then
+  echo "testhw usage: testhw boarding_directory"
+  exit
+fi
+
+cd $1
+rm -f *.out out*.txt result*.txt input* *.dat CPUTimer.* StackAr* QueueAr* &> /dev/null
+cp -f $testerDirectory/* .
+echo -n "Scores from p1 for " > results.txt
+
+if [ -e authors.csv ]; then
+  dos2unix -q authors.csv
+  awk -F, {'for (i = 2; i <= NF; ++i) printf"%s ", $i'} authors.csv >> results.txt
+  echo -e "\n"
+  awk -F, 'NR < 4 {for (i = 2; i <= NF; ++i) printf"%s", $i; printf"\n";}' authors.csv > names.txt
+  echo -e "\nNote that format is: e-mail<comma>last name<comma>first name" >> results.txt
+  echo "For example: ssdavis@ucdavis.edu,Davis,Sean"  >> results.txt
+  awk -F, {'printf"%s ", $1'} authors.csv > addresses
+else
+  echo  "You need to create an authors.csv file!!!! No one will receive credit for this assignment"  >> results.txt
+  echo "$1@ucdavis.edu" > addresses
+  finger ${PWD##*/} | awk 'NR == 1 {printf"%s,%s", $5, $4}' > names.txt
+fi
+
+
+echo -en "\nAddresses used: " >> results.txt 
+cat addresses >> results.txt
+echo " " >> results.txt
+echo "Directory: $1"
+
+TTScore=0
+
+if [ ! -e timetest.cpp ]; then
+  echo "timetest.cpp does not exist."  >> results.txt
+else
+  g++ timetest.cpp &> /dev/null
+
+  if [[ ! -e a.out ]]; then # a.out not found
+    echo "timetest.cpp does not compile!"  >> results.txt
+  else
+    TTScore=5
+    fileNum=1
+    echo timetest.cpp operation testing:  >> results.txt
+
+    while [[ $fileNum -lt 7 ]]; do
+      echo $fileNum  1>&2
+      echo "#$fileNum for user input: " >> results.txt
+      cat $testerDirectory/input$fileNum.txt >> results.txt
+      rm -f out$fileNum.txt
+      (a.out < $testerDirectory/input$fileNum.txt | awk '/CPU/ {print int($6 * 1000) }' | head -1 > out$fileNum.txt )&
+      sleep 1
+      pkill a.out >& /dev/null
+      testTime=0
+
+      if [ -e out$fileNum.txt ]; then
+        testTime=`cat out$fileNum.txt`
+      fi
+
+      if [[ $testTime -gt 10 && $testTime -lt 1000 ]]; then
+        echo OK >> results.txt
+      else
+        echo "Not OK, CPU time outside acceptable range" >> results.txt
+        echo $testTime >> results.txt
+        (( --TTScore ))
+      fi
+
+      (( fileNum++ ))
+    done  # while less than 7
+  fi # if timetest a.out
+fi # if timetest.cpp exists
+
+if [ $TTScore -lt 0 ]; then
+  TTScore=0
+fi
+
+boardingScore=0
+
+echo -e "\nboarding.cpp:" >>results.txt
+if [ ! -e boarding.cpp ]; then
+  echo "boarding.cpp not found." >> results.txt
+else  # boarding.cpp found
+  grep -e '#include *<' boarding.cpp | egrep -v "(iostream|fstream|QueueAr|StackAr)" > temp
+  grep -v ifstream boarding.cpp | grep "\[" >> temp
+  grep string boarding.cpp >> temp
+  if [ -s temp ]; then
+    echo "#include of system header file other than iostream, fstream, StackAr, QueueAr, or" >> results.txt
+    echo "'[' on a line without 'ifstream', or 'string' found in boarding.* so zero."  >> results.txt
+  else # No violation of specs
+    g++ boarding.cpp -o boarding.out
+
+    if [ ! -e boarding.out ]; then # boarding.out not found
+      echo "boarding.cpp does not compile!"  >> results.txt
+    else #boarding.out create  
+      fileNum=1
+
+      while [[ $fileNum -lt 5 ]]; do
+        echo "$fileNum:"
+        echo "passengers-$fileNum.txt:" >> results.txt
+        echo boarding.out $testerDirectory/passengers-$fileNum.txt
+        rm temp &> /dev/null
+        (boarding.out $testerDirectory/passengers-$fileNum.txt > temp)&
+        count=0
+
+        while [[ $count -lt $maxSleep ]]; do
+          sleep 1
+          (( count += 1 ))
+          ps | grep boarding.out > temp2
+
+          if [ ! -s temp2 ]; then
+            break
+          fi
+        done
+
+        rm core &> /dev/null
+        
+        if [ -e temp ]; then
+          diff temp out-$fileNum.txt > temp2
+          if [ -s temp2 ]; then
+            echo "There are differences between your output and Sean's." >> results.txt
+            echo "Yours: " >> results.txt
+            cat temp >> results.txt
+            echo "Sean's:"
+            cat out-$fileNum.txt
+          else
+            echo OK
+            (( boardingScore += 5 )) 
+          fi 
+        else
+          echo "Does not complete this file." >> results.txt
+        fi  # if temp created
+       
+        fileNum=$((fileNum + 1))
+      done  # for each file of the four files
+    fi # if boarding.out not found
+  fi # if design violation
+fi # if boarding.cpp found
+
+
+echo  "Timetest score: $TTScore  Boarding score: $boardingScore"  >> results.txt
+(( totalScore =  boardingScore + TTScore ))
+echo "Total: $totalScore out of 25.">> results.txt
+
+#  mailx -s "ECS 60 P1 Test Results" `cat addresses` < results.txt
+
+# awk 'NR == 1 {printf"%s,", $0}' names.txt >> ../results.csv
+#echo " ${1%%/},$totalScore,$TTScore,$boardingScore" >> ../results.csv
+#authorCount=$(grep "@" authors.csv | wc -l)
+
+#if [ $authorCount -gt 1 ]; then
+#  awk 'NR == 2 {printf"%s,", $0}' names.txt >> ../results.csv
+#  echo "${1%%/},$totalScore,$TTScore,$boardingScore" >> ../results.csv
+#fi

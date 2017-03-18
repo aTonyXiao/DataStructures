@@ -1,0 +1,8 @@
+The testhw grading script and the Testing directory are now available for use, and copying.
+Copy testhw to one of your own directories.
+There is no need to copy the Testing directory.
+testhw takes only one argument--the directory that holds your timetest.cpp, deque.cpp, and deque.h.
+testhw will place all of the results in results.txt in the directory with the
+timetest.cpp and deque code in it.
+
+Sean

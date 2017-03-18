@@ -1,0 +1,21 @@
+Scores from p5 for Tony,Xiao , , 
+
+Note that the format for authors.csv is: e-mail<comma>last name<comma>first name
+For example: ssdavis@ucdavis.edu,Davis,Sean
+
+Addresses used: bxiao@ucdavis.edu    
+This is a run of p5 with a one minute limit on the time allowed per run.
+Scores from p5 for Tony,Xiao
+,
+,
+Makefile optimization check: 
+OK
+Testing /home/ssdavis/60/p5/Testing/net-5000-500-15000-2.txt
+CPU: 1.95498 Flow: 6740
+Testing /home/ssdavis/60/p5/Testing/net-2000-20-4000-3.txt
+CPU: 0.016939 Flow: 159
+Testing /home/ssdavis/60/p5/Testing/net-3500-260-8750-4.txt
+CPU: 0.595206 Flow: 3193
+
+Total CPU Time: Yours 2.56712  Sean's: 2.82 so your score is 28
+Total score: 28 + 25 = 53

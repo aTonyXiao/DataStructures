@@ -1,0 +1,9 @@
+The testhw and the Testing directory are now available for use.
+Copy testhw to one of your own directories.
+There is no need to copy the Testing directory.
+testhw takes only one argument--the directory that holds your huffman.cpp source code.
+The test runs your program on three files, and compares various aspects of your
+output with those aspects of my output.
+The results are placed in the results.txt file in the directory with the source code in it.
+
+Sean

@@ -1,0 +1,3 @@
+Back to front: 3160
+Random: 2625
+Outside in: 2190
